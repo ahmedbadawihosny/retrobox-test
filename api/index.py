@@ -1,6 +1,10 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+# Enable CORS for all domains (or specify if needed)
+CORS(app)
 
 # Constants for the game
 PLAYER_X = "X"
@@ -73,7 +77,7 @@ def best_move(board):
 
 @app.route('/move', methods=['POST'])
 def make_move():
-    """ Handle the Tic Tac Toe move. """
+    """ Handle the Tic-Tac-Toe move. """
     data = request.get_json()
     board = data['board']
     move = best_move(board)
