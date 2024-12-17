@@ -16,6 +16,7 @@ def check_winner(board):
     for combo in winning_combinations:
         if board[combo[0]] == board[combo[1]] == board[combo[2]] != ' ':
             return board[combo[0]]
+            reset_game()
     return None
 
 def minimax(board, depth, is_maximizing):
