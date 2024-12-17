@@ -62,6 +62,11 @@ def best_move(board):
 def make_move():
     data = request.json
     position = data.get('position')
+    
+    # Validate position
+    if position is None or position < 0 or position >= 9:
+        return jsonify({'error': 'Invalid position'}), 400
+
     if board[position] == ' ':
         board[position] = 'X'  # Player's move
         winner = check_winner(board)
@@ -70,7 +75,7 @@ def make_move():
 
         ai_move = best_move(board)
         board[ai_move] = 'O'  # AI's move
-        winner = check_winner(board)
+        winner = check_winner (board)
         return jsonify({'board': board, 'winner': winner})
     return jsonify({'error': 'Invalid move'}), 400
 
