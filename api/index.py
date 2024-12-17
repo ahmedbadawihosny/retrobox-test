@@ -1,87 +1,82 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask import Flask, request, jsonify
+import random
 
 app = Flask(__name__)
 
-# Enable CORS for all domains (or specify if needed)
-CORS(app)
-
-# Constants for the game
-PLAYER_X = "X"
-PLAYER_O = "O"
-EMPTY = " "
-
-def print_board(board):
-    """ Helper function to print the board for debugging. """
-    for row in board:
-        print(" | ".join(row))
-        print("-" * 5)
+# Initialize the game board
+board = [' ' for _ in range(9)]  # A list to hold the board state
 
 def check_winner(board):
-    """ Check if there's a winner in the board. """
-    for row in board:
-        if row[0] == row[1] == row[2] != EMPTY:
-            return row[0]
-    for col in range(3):
-        if board[0][col] == board[1][col] == board[2][col] != EMPTY:
-            return board[0][col]
-    if board[0][0] == board[1][1] == board[2][2] != EMPTY:
-        return board[0][0]
-    if board[0][2] == board[1][1] == board[2][0] != EMPTY:
-        return board[0][2]
+    # Winning combinations
+    winning_combinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Horizontal
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Vertical
+        [0, 4, 8], [2, 4, 6]              # Diagonal
+    ]
+    for combo in winning_combinations:
+        if board[combo[0]] == board[combo[1]] == board[combo[2]] != ' ':
+            return board[combo[0]]
     return None
 
 def minimax(board, depth, is_maximizing):
-    """ Minimax algorithm to decide the best move for the AI. """
+    scores = {'X': -1, 'O': 1, 'tie': 0}
     winner = check_winner(board)
-    if winner == PLAYER_X:
-        return -1
-    if winner == PLAYER_O:
-        return 1
-    if all(board[row][col] != EMPTY for row in range(3) for col in range(3)):
-        return 0
+    if winner:
+        return scores[winner]
 
     if is_maximizing:
-        best = -float('inf')
-        for row in range(3):
-            for col in range(3):
-                if board[row][col] == EMPTY:
-                    board[row][col] = PLAYER_O
-                    best = max(best, minimax(board, depth + 1, False))
-                    board[row][col] = EMPTY
-        return best
+        best_score = -float('inf')
+        for i in range(9):
+            if board[i] == ' ':
+                board[i] = 'O'
+                score = minimax(board, depth + 1, False)
+                board[i] = ' '
+                best_score = max(score, best_score)
+        return best_score
     else:
-        best = float('inf')
-        for row in range(3):
-            for col in range(3):
-                if board[row][col] == EMPTY:
-                    board[row][col] = PLAYER_X
-                    best = min(best, minimax(board, depth + 1, True))
-                    board[row][col] = EMPTY
-        return best
+        best_score = float('inf')
+        for i in range(9):
+            if board[i] == ' ':
+                board[i] = 'X'
+                score = minimax(board, depth + 1, True)
+                board[i] = ' '
+                best_score = min(score, best_score)
+        return best_score
 
 def best_move(board):
-    """ Get the best move for AI using Minimax. """
-    best_val = -float('inf')
-    move = (-1, -1)
-    for row in range(3):
-        for col in range(3):
-            if board[row][col] == EMPTY:
-                board[row][col] = PLAYER_O
-                move_val = minimax(board, 0, False)
-                board[row][col] = EMPTY
-                if move_val > best_val:
-                    best_val = move_val
-                    move = (row, col)
+    best_score = -float('inf')
+    move = -1
+    for i in range(9):
+        if board[i] == ' ':
+            board[i] = 'O'
+            score = minimax(board, 0, False)
+            board[i] = ' '
+            if score > best_score:
+                best_score = score
+                move = i
     return move
 
 @app.route('/move', methods=['POST'])
 def make_move():
-    """ Handle the Tic-Tac-Toe move. """
-    data = request.get_json()
-    board = data['board']
-    move = best_move(board)
-    return jsonify({'move': move})
+    data = request.json
+    position = data.get('position')
+    if board[position] == ' ':
+        board[position] = 'X'  # Player's move
+        winner = check_winner(board)
+        if winner or ' ' not in board:
+            return jsonify({'board': board, 'winner': winner})
 
-if __name__ == "__main__":
+        ai_move = best_move(board)
+        board[ai_move] = 'O'  # AI's move
+        winner = check_winner(board)
+        return jsonify({'board': board, 'winner': winner})
+    return jsonify({'error': 'Invalid move'}), 400
+
+@app.route('/reset', methods=['POST'])
+def reset_game():
+    global board
+    board = [' ' for _ in range(9)]
+    return jsonify({'board': board})
+
+if __name__ == '__main__':
     app.run(debug=True)
