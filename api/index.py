@@ -81,7 +81,7 @@ def make_move():
         return jsonify({'board': board, 'winner': winner})
     return jsonify({'error': 'Invalid move'}), 400
 
-@app.route('/reset', methods=['POST'])
+@app.route('/reset', methods=['GET'])
 def reset_game():
     global board
     board = [' ' for _ in range(9)]
