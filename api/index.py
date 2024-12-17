@@ -62,10 +62,9 @@ def home():
 
 @app.route('/move', methods=['GET'])
 def make_move():
-    data = request.json
-    position = data.get('position')
+    """ Handle the Tic Tac Toe move. """
+    position = request.args.get('position', type=int)
     
-    # Validate position
     if position is None or position < 0 or position >= 9:
         return jsonify({'error': 'Invalid position'}), 400
 
@@ -77,8 +76,9 @@ def make_move():
 
         ai_move = best_move(board)
         board[ai_move] = 'O'  # AI's move
-        winner = check_winner (board)
+        winner = check_winner(board)
         return jsonify({'board': board, 'winner': winner})
+    
     return jsonify({'error': 'Invalid move'}), 400
 
 @app.route('/reset', methods=['GET'])
