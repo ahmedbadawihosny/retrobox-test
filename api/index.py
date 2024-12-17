@@ -62,9 +62,9 @@ def home():
 
 @app.route('/move', methods=['GET'])
 def make_move():
-    """ Handle the Tic Tac Toe move. """
     position = request.args.get('position', type=int)
     
+    # Validate position
     if position is None or position < 0 or position >= 9:
         return jsonify({'error': 'Invalid position'}), 400
 
@@ -86,3 +86,6 @@ def reset_game():
     global board
     board = [' ' for _ in range(9)]
     return jsonify({'board': board})
+
+if __name__ == '__main__':
+    app.run(debug=True)
