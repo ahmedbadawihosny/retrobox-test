@@ -60,7 +60,7 @@ def best_move(board):
 def home():
     return 'Hello, World!'
 
-@app.route('/move', methods=['POST'])
+@app.route('/move', methods=['GET'])
 def make_move():
     data = request.json
     position = data.get('position')
