@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
-import random
+from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # Initialize the game board
 board = [' ' for _ in range(9)]  # A list to hold the board state
