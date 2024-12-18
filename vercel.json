@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/api/xo_game" },
-    { "source": "/(.*)", "destination": "/api/sudoko_game" }
+    { "source": "/xo/(.*)", "destination": "/api/xo_api" },
+    { "source": "/sudoko/(.*)", "destination": "/api/sudoko_api" }
   ]
 }
