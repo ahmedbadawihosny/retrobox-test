@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/xo/(.*)", "destination": "/api/xo_api" },
-    { "source": "/sudoko/(.*)", "destination": "/api/sudoko_api" }
+    { "source": "/(.*)", "destination": "/api/index" }
   ]
 }

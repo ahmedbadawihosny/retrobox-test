@@ -6,9 +6,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'Hello, World!'
+    return 'Welcome To RetroBox 👾😍'
 
-@app.route('/move', methods=['GET'])
+@app.route('/xo/move', methods=['GET'])
 def make_move():
     position = request.args.get('position', type=int)
     
@@ -29,11 +29,19 @@ def make_move():
     
     return jsonify({'error': 'Invalid move'}), 400
 
-@app.route('/reset', methods=['GET'])
+@app.route('/xo/reset', methods=['GET'])
 def reset_game():
     global board
     board = [' ' for _ in range(9)]
     return jsonify({'board': board})
+
+@app.route('/sudoko/reset', methods=['GET'])
+def sudoko():
+    return 'Welcome To Sudoko Game'
+
+@app.route('/chess/reset', methods=['GET'])
+def chess():
+    return 'Welcome to Chess Game'
 
 if __name__ == '__main__':
     app.run(debug=True)
