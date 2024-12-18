@@ -35,11 +35,11 @@ def reset_game():
     board = [' ' for _ in range(9)]
     return jsonify({'board': board})
 
-@app.route('/sudoko/reset', methods=['GET'])
+@app.route('/sudoko', methods=['GET'])
 def sudoko():
     return 'Welcome To Sudoko Game'
 
-@app.route('/chess/reset', methods=['GET'])
+@app.route('/chess', methods=['GET'])
 def chess():
     return 'Welcome to Chess Game'
 
