@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'Welcome To RetroBox 👾😍'
+  return jsonify({"message": "Welcome To RetroBox 👾😍"})
 
 @app.route('/xo/move', methods=['GET'])
 def make_move():

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetroBox API Message</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+    .message {
+      font-size: 1.5em;
+      color: #333;
+      margin-top: 20px;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>RetroBox API Message</h1>
+  <div id="output" class="message">Loading message...</div>
+
+  <script>
+    // API endpoint
+    const apiURL = "https://retrobox-api.vercel.app/";
+
+    // Function to fetch and display the API message
+    async function fetchMessage() {
+      try {
+        const response = await fetch(apiURL);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        document.getElementById('output').textContent = data.message;
+      } catch (error) {
+        document.getElementById('output').textContent = 'Failed to fetch message.';
+        document.getElementById('output').classList.add('error');
+        console.error('Error fetching the message:', error);
+      }
+    }
+
+    // Call the function to fetch and display the message
+    fetchMessage();
+  </script>
+</body>
+</html>
