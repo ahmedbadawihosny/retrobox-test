@@ -13,6 +13,8 @@ def check_winner_easy(board):
     for combo in winning_combinations:
         if board[combo[0]] == board[combo[1]] == board[combo[2]] != ' ':
             return board[combo[0]]
+    if ' ' not in board:  # Check for a tie
+        return 'tie'
     return None
 
 def minimax_easy(board, depth, is_maximizing):

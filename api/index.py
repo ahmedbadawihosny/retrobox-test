@@ -11,7 +11,7 @@ def home():
   return jsonify({"message": "Welcome To RetroBox 👾😍"})
 
 @app.route('/xo/esay/move', methods=['GET'])
-def make_move_easy():
+def make_move_esay():
     position = request.args.get('position', type=int)
     
     # Validate position
@@ -93,11 +93,11 @@ def reset_game():
 
 @app.route('/sudoko', methods=['GET'])
 def sudoko():
-    return 'Welcome To Sudoko Game'
+    return jsonify({"Welcome To Sudoko Game"})
 
 @app.route('/chess', methods=['GET'])
 def chess():
-    return 'Welcome to Chess Game'
+    return jsonify({"message": "Welcome to Chess Game"})
 
 if __name__ == '__main__':
     app.run(debug=True)
