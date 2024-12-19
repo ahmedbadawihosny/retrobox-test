@@ -86,19 +86,19 @@ def make_move_hard():
     return jsonify({'board': board_hard, 'winner': None})
 
 @app.route('/xo/esay/reset', methods=['GET'])
-def reset_game():
+def reset_esay_game():
     global board_esay
     board_esay = [' ' for _ in range(9)]
     return jsonify({'board': board_esay})
 
 @app.route('/xo/meduim/reset', methods=['GET'])
-def reset_game():
+def reset_medium_game():
     global board_meduim
     board_meduim = [' ' for _ in range(9)]
     return jsonify({'board': board_meduim})
 
 @app.route('/xo/hard/reset', methods=['GET'])
-def reset_game():
+def reset_hard_game():
     global board_hard
     board_hard = [' ' for _ in range(9)]
     return jsonify({'board': board_hard})
