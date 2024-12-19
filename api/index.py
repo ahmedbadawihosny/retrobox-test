@@ -18,16 +18,16 @@ def make_move_esay():
     if position is None or position < 0 or position >= 9:
         return jsonify({'error': 'Invalid position'}), 400
 
-    if board[position] == ' ':
-        board[position] = 'X'  # Player's move
-        winner = check_winner_easy(board)
-        if winner or ' ' not in board:
-            return jsonify({'board': board, 'winner': winner})
+    if board_esay[position] == ' ':
+        board_esay[position] = 'X'  # Player's move
+        winner = check_winner_easy(board_esay)
+        if winner or ' ' not in board_esay:
+            return jsonify({'board': board_esay, 'winner': winner})
 
-        ai_move = best_move_easy(board)
-        board[ai_move] = 'O'  # AI's move
-        winner = check_winner_easy(board)
-        return jsonify({'board': board, 'winner': winner})
+        ai_move = best_move_easy(board_esay)
+        board_esay[ai_move] = 'O'  # AI's move
+        winner = check_winner_easy(board_esay)
+        return jsonify({'board': board_esay, 'winner': winner})
     
     return jsonify({'error': 'Invalid move'}), 400
 
@@ -43,16 +43,16 @@ def make_move_medium():
     if difficulty not in ['easy', 'medium', 'hard']:
         return jsonify({'error': 'Invalid difficulty level'}), 400
 
-    if board[position] == ' ':
-        board[position] = 'X'  # Player's move
-        winner = check_winner_medium(board)
-        if winner or ' ' not in board:
-            return jsonify({'board': board, 'winner': winner})
+    if board_meduim[position] == ' ':
+        board_meduim[position] = 'X'  # Player's move
+        winner = check_winner_medium(board_meduim)
+        if winner or ' ' not in board_meduim:
+            return jsonify({'board': board_meduim, 'winner': winner})
 
-        ai_move = best_move_medium(board, difficulty=difficulty)
-        board[ai_move] = 'O'  # AI's move
-        winner = check_winner_medium(board)
-        return jsonify({'board': board, 'winner': winner})
+        ai_move = best_move_medium(board_meduim, difficulty=difficulty)
+        board_meduim[ai_move] = 'O'  # AI's move
+        winner = check_winner_medium(board_meduim)
+        return jsonify({'board': board_meduim, 'winner': winner})
     
     return jsonify({'error': 'Invalid move'}), 400
 
@@ -64,32 +64,44 @@ def make_move_hard():
     if position is None or position < 0 or position >= 9:
         return jsonify({'error': 'Invalid position'}), 400
 
-    if board[position] != ' ':
+    if board_hard[position] != ' ':
         return jsonify({'error': 'Invalid move, position already occupied'}), 400
 
     # Player's move
-    board[position] = 'X'
-    winner = check_winner_hard(board)
+    board_hard[position] = 'X'
+    winner = check_winner_hard(board_hard)
     if winner:
-        return jsonify({'board': board, 'winner': winner})
+        return jsonify({'board': board_hard, 'winner': winner})
 
-    if ' ' not in board:  # Check for tie after player's move
-        return jsonify({'board': board, 'winner': 'tie'})
+    if ' ' not in board_hard:  # Check for tie after player's move
+        return jsonify({'board': board_hard, 'winner': 'tie'})
 
     # AI's move
-    ai_move = best_move_hard(board)
-    board[ai_move] = 'O'
-    winner = check_winner_hard(board)
+    ai_move = best_move_hard(board_hard)
+    board_hard[ai_move] = 'O'
+    winner = check_winner_hard(board_hard)
     if winner:
-        return jsonify({'board': board, 'winner': winner})
+        return jsonify({'board': board_hard, 'winner': winner})
 
-    return jsonify({'board': board, 'winner': None})
+    return jsonify({'board': board_hard, 'winner': None})
 
-@app.route('/xo/reset', methods=['GET'])
+@app.route('/xo/esay/reset', methods=['GET'])
 def reset_game():
-    global board
-    board = [' ' for _ in range(9)]
-    return jsonify({'board': board})
+    global board_esay
+    board_esay = [' ' for _ in range(9)]
+    return jsonify({'board': board_esay})
+
+@app.route('/xo/meduim/reset', methods=['GET'])
+def reset_game():
+    global board_meduim
+    board_meduim = [' ' for _ in range(9)]
+    return jsonify({'board': board_meduim})
+
+@app.route('/xo/hard/reset', methods=['GET'])
+def reset_game():
+    global board_hard
+    board_hard = [' ' for _ in range(9)]
+    return jsonify({'board': board_hard})
 
 @app.route('/sudoko', methods=['GET'])
 def sudoko():
