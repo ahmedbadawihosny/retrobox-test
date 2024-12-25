@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 
-from backend.xo_game import best_move, check_winner
+from backend.xo_game_easy import random_move as easy_move, check_winner as check_winner_easy
+from backend.xo_game_medium import medium_move, check_winner as check_winner_medium
+from backend.xo_game_hard import best_move, check_winner as check_winner_hard
 
 app = Flask(__name__)
 
@@ -8,8 +10,8 @@ app = Flask(__name__)
 def home():
   return jsonify({"message": "Welcome To RetroBox 👾😍"})
 
-@app.route('/xo/move', methods=['GET'])
-def make_move():
+@app.route('/xo/<level>/move', methods=['GET'])
+def make_move(level):
     position = request.args.get('position', type=int)
     
     # Validate position
@@ -18,13 +20,31 @@ def make_move():
 
     if board[position] == ' ':
         board[position] = 'X'  # Player's move
-        winner = check_winner(board)
+        if level == 'easy':
+            winner = check_winner_easy(board)
+        elif level == 'medium':
+            winner = check_winner_medium(board)
+        else:
+            winner = check_winner_hard(board)
+        
         if winner or ' ' not in board:
             return jsonify({'board': board, 'winner': winner})
 
-        ai_move = best_move(board)
+        if level == 'easy':
+            ai_move = easy_move(board)
+        elif level == 'medium':
+            ai_move = medium_move(board)
+        else:
+            ai_move = best_move(board)
+        
         board[ai_move] = 'O'  # AI's move
-        winner = check_winner(board)
+        if level == 'easy':
+            winner = check_winner_easy(board)
+        elif level == 'medium':
+            winner = check_winner_medium(board)
+        else:
+            winner = check_winner_hard(board)
+        
         return jsonify({'board': board, 'winner': winner})
     
     return jsonify({'error': 'Invalid move'}), 400
