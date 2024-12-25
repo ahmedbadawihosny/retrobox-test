@@ -20,3 +20,7 @@ def check_winner(board):
 def random_move(board):
     available_moves = [i for i, spot in enumerate(board) if spot == ' ']
     return random.choice(available_moves)
+
+def easy_move(board):
+    # Make a random move without any strategy
+    return random_move(board)
